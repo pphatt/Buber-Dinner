@@ -1,6 +1,6 @@
 ﻿using Server.Contracts.Authentication;
 
-namespace Server.Application.Common.Interfaces;
+namespace Server.Application.Common.Interfaces.Services;
 
 public interface IAuthenticationService
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.Application.Common.Interfaces;
+using Server.Application.Common.Interfaces.Services;
 using Server.Contracts.Authentication;
 
 namespace Server.API.Controllers;
