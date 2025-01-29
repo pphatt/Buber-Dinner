@@ -1,6 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Server.Application.Common.Interfaces.Authentication;
 using Server.Application.Common.Interfaces.Services;
+using Server.Domain.Entity.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,22 +14,21 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JwtSettings _jwtSettings;
 
-    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, JwtSettings jwtSettings)
+    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
     {
         _dateTimeProvider = dateTimeProvider;
-        _jwtSettings = jwtSettings;
+        _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(Guid UserId, string FirstName, string LastName)
+    public string GenerateToken(AppUsers user)
     {
         var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)), SecurityAlgorithms.HmacSha256);
 
-
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, UserId.ToString()),
-            new Claim(JwtRegisteredClaimNames.GivenName, FirstName.ToString()),
-            new Claim(JwtRegisteredClaimNames.FamilyName, LastName.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName.ToString()),
+            new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
