@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.Application.Common.Interfaces.Services;
 using Server.Contracts.Authentication;
+using Server.Domain.Entity.Identity;
 
 namespace Server.API.Controllers;
 
@@ -21,10 +22,10 @@ public class AuthenticationController : ControllerBase
         var authenticationResult = _authenticationService.Login(request.Email, request.Password);
 
         var response = new AuthenticationResponse(
-            authenticationResult.Id,
-            authenticationResult.FirstName,
-            authenticationResult.LastName,
-            authenticationResult.Email,
+            authenticationResult.user.Id,
+            authenticationResult.user.FirstName,
+            authenticationResult.user.LastName,
+            authenticationResult.user.Email,
             authenticationResult.AccessToken
         );
 
@@ -34,13 +35,21 @@ public class AuthenticationController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(RegisterRequest request) 
     {
-        var authenticationResult = _authenticationService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+        var user = new AppUsers
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            Password = request.Password
+        };
+
+        var authenticationResult = _authenticationService.Register(user);
 
         var response = new AuthenticationResponse(
-            authenticationResult.Id,
-            authenticationResult.FirstName,
-            authenticationResult.LastName,
-            authenticationResult.Email,
+            authenticationResult.user.Id,
+            authenticationResult.user.FirstName,
+            authenticationResult.user.LastName,
+            authenticationResult.user.Email,
             authenticationResult.AccessToken
         );
 
