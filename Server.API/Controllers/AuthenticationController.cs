@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.API.Filter;
 using Server.Application.Common.Interfaces.Services;
 using Server.Contracts.Authentication;
 using Server.Domain.Entity.Identity;
@@ -7,6 +8,7 @@ namespace Server.API.Controllers;
 
 [ApiController]
 [Route("/authentication")]
+// [ErrorHandlingFilterAttribute]
 public class AuthenticationController : ControllerBase
 {
     IAuthenticationService _authenticationService;
